@@ -24,6 +24,9 @@
     - [Upgrade the controller](#upgrade-the-controller)
     - [Post-upgrade drift](#post-upgrade-drift)
     - [Deactivate `noop` mode](#deactivate-noop-mode)
+  - [Profiles and Transformations](#profiles-and-transformations)
+    - [Changing Profiles](#changing-profiles)
+  - [Experiment](#experiment)
 - [Setup for operation center](#setup-for-operation-center)
   - [Create a static agent](#create-a-static-agent)
   - [Create a cloud and pod template](#create-a-cloud-and-pod-template)
@@ -380,6 +383,66 @@ Assuming we have merged any post-upgrade changes, we want to start managing the 
   - Load the new bundle
 
 You have successfully navigated through an upgrade.
+
+### Profiles and Transformations
+
+The [bundle-profiles.yaml](./bundle-profiles.yaml) introduces the concept of profiles for bundles.
+
+- A profile provides preconfigured values for the bundleutils tool.
+- A profile also specifies which transformations the bundle should undertake.
+
+Information [explaining transformations](https://github.com/tsmp-falcon-platform/ci-bundle-utils/blob/main/docs/explaining-transformations.md#explaining-transformations) can be found on the tools docs.
+
+Let us consider two of the profiles in [bundle-profiles.yaml](./bundle-profiles.yaml). They differ in the transformations used:
+
+- [controllers-common.yaml](./transformations/controllers-common.yaml)     - a starter profile which removes a lot of config (effectively meaning if is not managed or tracked)
+- [controllers-advanced.yaml](./transformations/controllers-advanced.yaml) - a more detailed approach, managing the jobs and splitting configuration into separate files
+
+#### Changing Profiles
+
+Consider your current bundle produced using the `controllers-common` profile.
+
+It will look something like this:
+
+```sh
+❯ ls -1 bundles/controller-bundles/CONTROLLER
+bundle.yaml
+jenkins.yaml
+plugins.yaml
+```
+
+Let us change the profile.
+
+- Navigate to the controller
+  - Run the `casc-local-update` job
+    - This time changing the profile parameter to `controllers-advanced`
+    - The entry is updated and validation performed on the new bundle
+    - This is effectively the same as running `casc-local-drift`
+  - Review the drift branch changes
+  - **Are the changes expected?**
+    - Create the PR and merge
+  - **Are the changes unwanted?**
+    - Re-run the `casc-local-update` leaving the profile as `controller-common`
+
+If merged, the new bundle structure will look something like:
+
+```sh
+❯ ls -1 bundles/controller-bundles/CONTROLLER
+bundle.yaml
+items.yaml
+jenkins.casc.yaml
+jenkins.credentials.yaml
+jenkins.jenkins.clouds.yaml
+jenkins.security.yaml
+jenkins.support.yaml
+jenkins.views.yaml
+jenkins.yaml
+plugins.yaml
+```
+
+### Experiment
+
+Experiment with making your own changes to the [controllers-advanced.yaml](./transformations/controllers-advanced.yaml) or creating new transformations and profiles.
 
 ## Setup for operation center
 
