@@ -1,0 +1,72 @@
+# Patches based upon https://jsonpatch.com/
+patches:
+  jenkins.yaml:
+  # Remove the license section because the OC provides the license
+  - op: remove
+    path: /license
+
+  # remove the operationsCenterRootAction because it is provided by the OC
+  - op: remove
+    path: /unclassified/operationsCenterRootAction
+
+  # remove rbac from the controller (provided by the OC)
+  rbac.yaml:
+  - op: remove
+    path: /roles
+  - op: remove
+    path: /groups
+
+# See https://github.com/tsmp-falcon-platform/ci-bundle-utils/blob/main/docs/explaining-transformations.md#explaining-transformations
+splits:
+
+  # Split by name on regex (auto takes each item separately)
+  items:
+    items.yaml:
+
+    # remove any test jobs from the bundle
+    - target: delete
+      patterns: ['test-.*']
+
+    # put each of the team-.* jobs into their own file
+    - target: auto
+      patterns: ['team-.*']
+
+
+  jcasc:
+    # Split by path (auto takes each item separately, replacing '/' with '.')
+    jenkins.yaml:
+
+    # put all the credentials stuff in one file
+    - target: credentials.yaml
+      paths:
+      - globalCredentialsConfiguration
+      - credentials
+
+    # put all the views stuff in one file
+    - target: views.yaml
+      paths:
+      - jenkins/primaryView
+      - jenkins/views
+
+    # put all the security stuff in one file
+    - target: security.yaml
+      paths:
+      - jenkins/authorizationStrategy
+      - jenkins/securityRealm
+      - security
+
+    # put all the casc stuff in one file
+    - target: casc.yaml
+      paths:
+      - cloudBeesCasCServer
+      - unclassified/bundleStorageService
+      - unclassified/bundleUpdateTiming
+      - unclassified/cascAutoControllerProvisioning
+      - unclassified/cascItemsConfiguration
+
+    # put each of the following in to their own file
+    - target: auto
+      paths:
+      - jenkins/clouds
+      - masterprovisioning
+      - support

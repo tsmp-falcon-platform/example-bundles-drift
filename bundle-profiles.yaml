@@ -30,4 +30,16 @@ profiles:
       transformations/remove-dynamic-stuff.yaml
       transformations/controllers-common.yaml
 
+  controller-advanced: &controller-advanced
+    BUNDLEUTILS_CI_TYPE: mm
+    BUNDLEUTILS_FETCH_USE_CAP_ENVELOPE: true
+    BUNDLEUTILS_CATALOG_WARNINGS_STRATEGY: COMMENT
+    BUNDLEUTILS_CI_JAVA_OPTS: >-
+      -Djenkins.security.SystemReadPermission=true
+      -Djenkins.security.ManagePermission=true
+      -Dhudson.security.ExtendedReadPermission=true
+    BUNDLEUTILS_TRANSFORM_CONFIGS: >-
+      transformations/remove-dynamic-stuff.yaml
+      transformations/controllers-advanced.yaml
+
 bundles: {}
