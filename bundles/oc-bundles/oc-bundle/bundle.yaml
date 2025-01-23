@@ -1,1 +1,6 @@
-# Placeholder until fetch and transform is run
+apiVersion: '2'
+id: oc-bundle
+description: Bundle for oc-bundle
+version: f7f08ea106e8688edc75b4da7d43933f
+jcasc:
+- jenkins.yaml
