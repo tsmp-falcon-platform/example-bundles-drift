@@ -18,6 +18,7 @@
     - [Bootstrap the controller](#bootstrap-the-controller)
     - [Ensure drift detection](#ensure-drift-detection)
     - [Track changes](#track-changes)
+  - [Auditing](#auditing)
   - [Manage Upgrades](#manage-upgrades)
     - [Activate `noop` mode](#activate-noop-mode)
     - [Upgrade the controller](#upgrade-the-controller)
@@ -299,6 +300,23 @@ Let's make a change and try again.
     - Create the PR and merge
   - **Are the changes unwanted?**
     - Force reload the bundle and revert them
+
+### Auditing
+
+The `casc-local-audit` job will create a comprehensive but non-viable version of the bundle. This is saved in the audit repository.
+
+- Navigate to the new controller
+  - Run the `casc-local-audit` job
+  - Make a change to the system message
+  - Run the `casc-local-audit` job again
+  - Examine the commits in the audit repository
+  - Run the `casc-local-audit` job again
+  - Notice that no commit is performed if no changes are detected
+
+The audit job:
+
+- can be triggered any time
+- is extremely fast since it does not perform validation
 
 ### Manage Upgrades
 
