@@ -10,6 +10,8 @@ This repository serves as a template for managing CloudBees CI bundles using [bu
 
 The repository includes setup instructions for both **controllers** and **operation center** instances.
 
+## TOC
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
