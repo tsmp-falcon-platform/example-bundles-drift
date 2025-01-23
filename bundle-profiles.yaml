@@ -1,0 +1,33 @@
+profiles:
+  # special profile for the audit jobs
+  audit: &audit
+    BUNDLEUTILS_PLUGINS_JSON_MERGE_STRATEGY: ALL
+    BUNDLEUTILS_PLUGINS_JSON_LIST_STRATEGY: ALL
+    # if you want to use a dedicated target directory for the audit jobs
+    # paths are relative to this file
+    BUNDLEUTILS_AUDIT_TARGET_BASE_DIR: ../audit
+
+  oc-common: &oc-common
+    BUNDLEUTILS_CI_TYPE: oc
+    BUNDLEUTILS_FETCH_USE_CAP_ENVELOPE: true
+    BUNDLEUTILS_CI_JAVA_OPTS: >-
+      -Djenkins.security.SystemReadPermission=true
+      -Djenkins.security.ManagePermission=true
+      -Dhudson.security.ExtendedReadPermission=true
+    BUNDLEUTILS_TRANSFORM_CONFIGS: >-
+      transformations/remove-dynamic-stuff.yaml
+      transformations/oc-common.yaml
+
+  controller-common: &controller-common
+    BUNDLEUTILS_CI_TYPE: mm
+    BUNDLEUTILS_FETCH_USE_CAP_ENVELOPE: true
+    BUNDLEUTILS_CATALOG_WARNINGS_STRATEGY: COMMENT
+    BUNDLEUTILS_CI_JAVA_OPTS: >-
+      -Djenkins.security.SystemReadPermission=true
+      -Djenkins.security.ManagePermission=true
+      -Dhudson.security.ExtendedReadPermission=true
+    BUNDLEUTILS_TRANSFORM_CONFIGS: >-
+      transformations/remove-dynamic-stuff.yaml
+      transformations/controllers-common.yaml
+
+bundles: {}

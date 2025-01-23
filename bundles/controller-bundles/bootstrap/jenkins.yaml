@@ -1,0 +1,13 @@
+jenkins:
+  clouds:
+  - operationsCenterAgentProvisioningService
+unclassified:
+  bundleUpdateTiming:
+    automaticReload: true
+    automaticRestart: true
+    rejectWarnings: true
+    reloadAlwaysOnRestart: false
+    skipNewVersions: false
+  cascItemsConfiguration:
+    variableInterpolationEnabledForAdmin: false
+    variableInterpolationEnabledForNonAdmin: false

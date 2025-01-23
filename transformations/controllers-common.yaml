@@ -1,6 +1,7 @@
 # Patches based upon https://jsonpatch.com/
 patches:
   jenkins.yaml:
+  # Remove the license section because the OC provides the license
   - op: remove
     path: /license
 
