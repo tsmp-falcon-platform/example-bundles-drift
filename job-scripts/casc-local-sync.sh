@@ -66,9 +66,17 @@ run_bootstrap_steps() {
     "${MAKE_COMMAND[@]}" bootstrap
   fi
   run_export_my_bundle "$myBundle"
+
   run_handle_drift
+  myBundle=$(bundleutils find-bundle-by-url -v '.*' || true)
+  if [ -z "$myBundle" ]; then
+    echo "Second bootstrap call needed because we do a hard reset of the branch on rebasing..."
+    "${MAKE_COMMAND[@]}" bootstrap
+  fi
+  run_export_my_bundle "$myBundle"
+
   run_checkout_drift
-  echo "Second bootstrap call needed because we do a hard reset of the branch..."
+  echo "Third bootstrap call needed because we do a hard reset of the branch on checkout..."
   "${MAKE_COMMAND[@]}" bootstrap
   run_main_target
   run_git_diff_commit_check_and_push
