@@ -1,8 +1,19 @@
 # Example Bundles Drift
 
+## Goals and Objectives
+
+This repository serves as a template for managing CloudBees CI bundles using [bundleutils](https://github.com/tsmp-falcon-platform/ci-bundle-utils). It provides:
+
+- A structured approach for defining, auditing, and tracking bundle configurations.
+- Automation for controller onboarding, drift detection, and upgrades.
+- Examples of using shared storage for caching are also provided.
+
+The repository includes setup instructions for both **controllers** and **operation center** instances.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Prerequisites](#prerequisites)
 - [Create the bundles repositories](#create-the-bundles-repositories)
   - [Update the repository references](#update-the-repository-references)
 - [A note on shared file system](#a-note-on-shared-file-system)
@@ -19,6 +30,7 @@
     - [Ensure drift detection](#ensure-drift-detection)
     - [Track changes](#track-changes)
   - [Auditing](#auditing)
+    - [Usages](#usages)
   - [Manage Upgrades](#manage-upgrades)
     - [Activate `noop` mode](#activate-noop-mode)
     - [Upgrade the controller](#upgrade-the-controller)
@@ -33,6 +45,16 @@
 - [Makefile](#makefile)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Prerequisites
+
+Ensure you have the following installed:
+
+- [Helm](https://helm.sh/docs/intro/install/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- A Kubernetes cluster with required permissions
+- GitHub access to necessary repositories
+- A running instance of the CloudBees CI operation center
 
 ## Create the bundles repositories
 
@@ -316,10 +338,14 @@ The `casc-local-audit` job will create a comprehensive but non-viable version of
   - Run the `casc-local-audit` job again
   - Notice that no commit is performed if no changes are detected
 
+#### Usages
+
 The audit job:
 
 - can be triggered any time
 - is extremely fast since it does not perform validation
+- could be run periodically
+- beware that performing a full export too frequently could put the instance under undue stress
 
 ### Manage Upgrades
 
