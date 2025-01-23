@@ -1,0 +1,10 @@
+apiVersion: '2'
+id: bootstrap
+description: Bundle for bootstrap
+version: 5d7a893812280e06adf53b22b71adfb4
+jcasc:
+- jenkins.yaml
+plugins:
+- plugins.yaml
+items:
+- items.yaml

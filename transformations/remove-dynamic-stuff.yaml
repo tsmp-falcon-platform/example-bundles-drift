@@ -14,3 +14,7 @@ patches:
   - op: remove
     path: /credentials
 
+
+    # if we set quietStartConfiguration, we need it to remain configured
+  - op: remove
+    path: /unclassified/quietStartConfiguration
