@@ -279,9 +279,9 @@ The following steps explain the onboarding process.
 
 #### Create a controller
 
-Create a new controller using the newly loaded `bootstrap` bundle.
+Create a new controller using the newly loaded `bootstrap` bundle. The controller will come up with the pre-configured management jobs available.
 
-The jobs include:
+The management jobs include:
 
 - `casc-local-audit` - Will export the bundle, obfuscate any credentials, and commit any changes to the audit repo.
 - `casc-local-bootstrap` - Will bootstrap the current controller to the `bundle-profiles.yaml`.
