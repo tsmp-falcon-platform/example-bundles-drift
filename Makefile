@@ -130,7 +130,6 @@ run/%/git-rebase-drift: run/%/git-checkout-drift
 	git fetch $(GIT_ORIGIN)
 	echo "Resetting hard to $(GIT_MAIN)"
 	git reset --hard $(GIT_ORIGIN)/$(GIT_MAIN)
-	git push --force $(GIT_ORIGIN) $$DRIFT_BRANCH_NAME
 	git checkout -
 
 .PHONY: run/%/deploy-cm
@@ -158,7 +157,24 @@ git-reset-main: ## Checkout latest main and run git reset --hard
 
 .PHONY: git-push
 git-push: ## Pushes the current branch to $(GIT_ORIGIN)
-	git push $(GIT_ORIGIN) $$(git branch --show-current)
+	set -e
+	behind_ahead=($$(git rev-list --left-right --count @{u}...HEAD 2>/dev/null))
+	behind=$${behind_ahead[0]}
+	ahead=$${behind_ahead[1]}
+	if [[ $$ahead -gt 0 && $$behind -gt 0 ]]; then \
+		echo "Diverged! A force push (--force) may be needed."; \
+		if [ "$$(git branch --show-current)" != "$(GIT_MAIN)" ]; then \
+			git push --force $(GIT_ORIGIN) $$(git branch --show-current); \
+		else \
+			echo "Should not push force on $(GIT_MAIN). Exiting with error..."; \
+			exit 1; \
+		fi; \
+	elif [[ $$ahead -gt 0 ]]; then \
+		echo "Ahead by $$ahead commits. Pushing..."; \
+		git push $(GIT_ORIGIN) $$(git branch --show-current); \
+	else \
+		echo "Up to date. No need to push anything..."; \
+	fi
 
 .PHONY: find
 find: ## List all bundle dirs according to bundle pattern var 'BP'
