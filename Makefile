@@ -158,9 +158,15 @@ git-reset-main: ## Checkout latest main and run git reset --hard
 .PHONY: git-push
 git-push: ## Pushes the current branch to $(GIT_ORIGIN)
 	set -e
+	echo "Checking behind and ahead commits..."
+	if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+		echo "No upstream branch found. Setting upstream branch..."
+		git branch --set-upstream-to=$(GIT_ORIGIN)/$$(git branch --show-current) $$(git branch --show-current)
+	fi
 	behind_ahead=($$(git rev-list --left-right --count @{u}...HEAD 2>/dev/null))
 	behind=$${behind_ahead[0]}
 	ahead=$${behind_ahead[1]}
+	echo "Behind: $$behind, Ahead: $$ahead"
 	if [[ $$ahead -gt 0 && $$behind -gt 0 ]]; then \
 		echo "Diverged! A force push (--force) may be needed."; \
 		if [ "$$(git branch --show-current)" != "$(GIT_MAIN)" ]; then \
